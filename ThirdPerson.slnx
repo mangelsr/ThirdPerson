@@ -23,6 +23,7 @@
   <Project Path="Unity.InputSystem.TestFramework.csproj" />
   <Project Path="Unity.VSCode.Editor.csproj" />
   <Project Path="Unity.Burst.Editor.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Unity.RenderPipelines.Universal.2D.Internal.csproj" />
   <Project Path="Unity.InputSystem.DocCodeSamples.csproj" />
   <Project Path="Unity.ShaderGraph.Utilities.csproj" />
