@@ -3,6 +3,8 @@ using UnityEngine;
 public class PlayerFreeLookState : PlayerBaseState
 {
     private readonly int FreeLookSpeedHash = Animator.StringToHash("FreeLookSpeed");
+    private readonly int FreeLookBlendTreeHash = Animator.StringToHash("FreeLookBlendTree");
+
     private const float AnimatorDampTime = 0.1f;
 
     public PlayerFreeLookState(PlayerStateMachine stateMachine) : base(stateMachine) { }
@@ -11,6 +13,7 @@ public class PlayerFreeLookState : PlayerBaseState
     {
         Debug.Log("Enter");
         stateMachine.InputReader.TargetEvent += OnTarget;
+        stateMachine.Animator.Play(FreeLookBlendTreeHash);
     }
 
     public override void Tick(float deltaTime)
@@ -24,8 +27,7 @@ public class PlayerFreeLookState : PlayerBaseState
         }
 
         Vector3 movement = CalculateMovement();
-
-        stateMachine.CharacterController.Move(movement * deltaTime * stateMachine.FreeLookMovementSpeed);
+        Move(movement * stateMachine.FreeLookMovementSpeed, deltaTime);
 
         stateMachine.Animator.SetFloat(FreeLookSpeedHash, 1, AnimatorDampTime, deltaTime);
         FaceMovementDirection(movement, deltaTime);
