@@ -18,6 +18,12 @@ public class PlayerFreeLookState : PlayerBaseState
 
     public override void Tick(float deltaTime)
     {
+        if (stateMachine.InputReader.IsAttacking)
+        {
+            stateMachine.SwitchState(new PlayerAttackingState(stateMachine, 0));
+            return;
+        }
+
         Vector2 movementValue = stateMachine.InputReader.MovementValue;
 
         if (movementValue == Vector2.zero)
