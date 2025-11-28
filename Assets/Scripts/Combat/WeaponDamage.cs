@@ -5,6 +5,7 @@ public class WeaponDamage : MonoBehaviour
 {
     [SerializeField] private Collider myCollider;
     private int damage;
+    private float knockback;
     private List<Collider> alreadyCollidedWith = new List<Collider>();
 
     private void OnEnable()
@@ -16,18 +17,23 @@ public class WeaponDamage : MonoBehaviour
     {
         if (other == myCollider) return;
 
+        if (alreadyCollidedWith.Contains(other)) return;
+
+        alreadyCollidedWith.Add(other);
+
         if (other.TryGetComponent(out Health health))
+            health.DealDamage(damage);
+
+        if (other.TryGetComponent(out ForceReceiver forceReceiver))
         {
-            if (!alreadyCollidedWith.Contains(other))
-            {
-                alreadyCollidedWith.Add(other);
-                health.DealDamage(damage);
-            }
+            Vector3 direction = (other.transform.position - myCollider.transform.position).normalized;
+            forceReceiver.AddForce(direction * knockback);
         }
     }
 
-    public void SetAttack(int damage)
+    public void SetAttack(int damage, float knockback)
     {
         this.damage = damage;
+        this.knockback = knockback;
     }
 }

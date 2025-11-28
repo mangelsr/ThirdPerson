@@ -106,12 +106,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5655249774629393586}
-  - component: {fileID: 6753474884219944742}
   - component: {fileID: 5459984585039835729}
+  - component: {fileID: 6753474884219944742}
   - component: {fileID: 4686527319882224270}
-  - component: {fileID: 836819281429923781}
-  - component: {fileID: 5075831726664671050}
+  - component: {fileID: 3533648966112672242}
   - component: {fileID: 297525262400808009}
+  - component: {fileID: 5075831726664671050}
+  - component: {fileID: 836819281429923781}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -141,18 +142,6 @@ Transform:
   - {fileID: 3189171825931755113}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6753474884219944742
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1038005377734459125}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa94165894131378fa42869e31c784b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &5459984585039835729
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,6 +167,7 @@ MonoBehaviour:
     <ForceTime>k__BackingField: 0.35
     <Force>k__BackingField: 15
     <Damage>k__BackingField: 10
+    <Knockback>k__BackingField: 15
   - <AnimationName>k__BackingField: Attack2
     <TransitionDuration>k__BackingField: 0.1
     <ComboStateIndex>k__BackingField: 2
@@ -185,6 +175,7 @@ MonoBehaviour:
     <ForceTime>k__BackingField: 0.35
     <Force>k__BackingField: 15
     <Damage>k__BackingField: 10
+    <Knockback>k__BackingField: 20
   - <AnimationName>k__BackingField: Attack3
     <TransitionDuration>k__BackingField: 0.2
     <ComboStateIndex>k__BackingField: -1
@@ -192,10 +183,23 @@ MonoBehaviour:
     <ForceTime>k__BackingField: 0.35
     <Force>k__BackingField: 20
     <Damage>k__BackingField: 15
+    <Knockback>k__BackingField: 25
   <WeaponDamage>k__BackingField: {fileID: 6627218122930646230}
   <FreeLookMovementSpeed>k__BackingField: 5
   <TargetingMovementSpeed>k__BackingField: 4
   <RotationDamping>k__BackingField: 10
+--- !u!114 &6753474884219944742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1038005377734459125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa94165894131378fa42869e31c784b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4686527319882224270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,28 +213,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 5075831726664671050}
+  agent: {fileID: 0}
   drag: 0.05
---- !u!95 &836819281429923781
-Animator:
-  serializedVersion: 5
+--- !u!114 &3533648966112672242
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1038005377734459125}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4ef2d01a3db196addae0d3e05181c064, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58c40a765269c11d780d40321d1d42a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+--- !u!114 &297525262400808009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1038005377734459125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b8de2d5260027ab7ba8c18ab8c3125a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponLogic: {fileID: 6644905890468897162}
 --- !u!143 &5075831726664671050
 CharacterController:
   m_ObjectHideFlags: 0
@@ -257,19 +267,27 @@ CharacterController:
   m_SkinWidth: 0.025
   m_MinMoveDistance: 0
   m_Center: {x: 0, y: 0.875, z: 0}
---- !u!114 &297525262400808009
-MonoBehaviour:
+--- !u!95 &836819281429923781
+Animator:
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1038005377734459125}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b8de2d5260027ab7ba8c18ab8c3125a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weaponLogic: {fileID: 6644905890468897162}
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4ef2d01a3db196addae0d3e05181c064, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1075289755982462973
 GameObject:
   m_ObjectHideFlags: 0

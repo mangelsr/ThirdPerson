@@ -3,7 +3,6 @@ using UnityEngine;
 public class PlayerAttackingState : PlayerBaseState
 {
     private Attack attack;
-    private float previousFrameTime;
     private bool alreadyAppliedForce = false;
 
     public PlayerAttackingState(PlayerStateMachine stateMachine, int attackIndex) : base(stateMachine)
@@ -13,7 +12,7 @@ public class PlayerAttackingState : PlayerBaseState
 
     public override void Enter()
     {
-        stateMachine.WeaponDamage.SetAttack(attack.Damage);
+        stateMachine.WeaponDamage.SetAttack(attack.Damage, attack.Knockback);
         stateMachine.Animator.CrossFadeInFixedTime(attack.AnimationName, attack.TransitionDuration);
     }
 
@@ -22,13 +21,13 @@ public class PlayerAttackingState : PlayerBaseState
         Move(deltaTime);
         FaceTarget();
 
-        float normalizedTime = GetNormalizedTime();
+        float normalizedTime = GetNormalizedTime(stateMachine.Animator);
 
         if (normalizedTime < 1f)
         {
             if (normalizedTime >= attack.ForceTime)
                 TryApplyForce();
-            
+
             if (stateMachine.InputReader.IsAttacking)
                 TryComboAttack(normalizedTime);
         }
@@ -43,29 +42,10 @@ public class PlayerAttackingState : PlayerBaseState
 
             stateMachine.SwitchState(newState);
         }
-
-        previousFrameTime = normalizedTime;
     }
 
     public override void Exit()
     {
-    }
-
-    private float GetNormalizedTime()
-    {
-        AnimatorStateInfo currentInfo = stateMachine.Animator.GetCurrentAnimatorStateInfo(0);
-        AnimatorStateInfo nextInfo = stateMachine.Animator.GetNextAnimatorStateInfo(0);
-
-        if (stateMachine.Animator.IsInTransition(0) && nextInfo.IsTag("Attack"))
-        {
-            return nextInfo.normalizedTime;
-        }
-        else if (!stateMachine.Animator.IsInTransition(0) && currentInfo.IsTag("Attack"))
-        {
-            return currentInfo.normalizedTime;
-        }
-
-        return 0f;
     }
 
     private void TryComboAttack(float normalizedTime)
