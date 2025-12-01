@@ -20,6 +20,8 @@ public class EnemyAttackingState : EnemyBaseState
 
         if (normalizedTime >= 1f)
             stateMachine.SwitchState(new EnemyChasingState(stateMachine));
+
+        FacePlayer();
     }
 
     public override void Exit()
