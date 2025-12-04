@@ -11,9 +11,13 @@ public class PlayerJumpingState : PlayerBaseState
     public override void Enter()
     {
         stateMachine.Animator.CrossFadeInFixedTime(JumpAnimationHash, CrossFadeDuration);
+        stateMachine.LedgeDetector.OnLedgeDetected += HandleLedgeDetect;
 
-        momentum = stateMachine.CharacterController.velocity;
-        momentum.y = 0;
+        if (stateMachine.InputReader.MovementValue != Vector2.zero)
+        {
+            momentum = stateMachine.CharacterController.velocity;
+            momentum.y = 0;
+        }
 
         stateMachine.ForceReceiver.Jump(stateMachine.JumpForce);
     }
@@ -33,5 +37,11 @@ public class PlayerJumpingState : PlayerBaseState
 
     public override void Exit()
     {
+        stateMachine.LedgeDetector.OnLedgeDetected -= HandleLedgeDetect;
+    }
+
+    private void HandleLedgeDetect(Vector3 ledgeForward, Vector3 closestPoint)
+    {
+        stateMachine.SwitchState(new PlayerHangingState(stateMachine, ledgeForward, closestPoint));
     }
 }
