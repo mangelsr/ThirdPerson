@@ -18,6 +18,8 @@ public class PlayerStateMachine : StateMachine
     [field: SerializeField] public float DodgeDuration { get; private set; }
     [field: SerializeField] public float DodgeDistance { get; private set; }
     [field: SerializeField] public float JumpForce { get; private set; }
+    [field: SerializeField] public float ParryWindowTime { get; private set; }
+    [field: SerializeField] public float ParryKnockback { get; private set; }
 
     public float dodgeSpeed => DodgeDistance / DodgeDuration;
 

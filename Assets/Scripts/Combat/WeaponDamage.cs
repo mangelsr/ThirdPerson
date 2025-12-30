@@ -8,6 +8,8 @@ public class WeaponDamage : MonoBehaviour
     private float knockback;
     private List<Collider> alreadyCollidedWith = new List<Collider>();
 
+    private GameObject owner;
+
     private void OnEnable()
     {
         alreadyCollidedWith.Clear();
@@ -22,7 +24,7 @@ public class WeaponDamage : MonoBehaviour
         alreadyCollidedWith.Add(other);
 
         if (other.TryGetComponent(out Health health))
-            health.DealDamage(damage);
+            health.DealDamage(damage, owner);
 
         if (other.TryGetComponent(out ForceReceiver forceReceiver))
         {
@@ -31,9 +33,10 @@ public class WeaponDamage : MonoBehaviour
         }
     }
 
-    public void SetAttack(int damage, float knockback)
+    public void SetAttack(int damage, float knockback, GameObject owner)
     {
         this.damage = damage;
         this.knockback = knockback;
+        this.owner = owner;
     }
 }
