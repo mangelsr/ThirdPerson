@@ -8,10 +8,6 @@ public class Health : MonoBehaviour
     private bool isInvulnerable;
     public bool isDead => health == 0;
 
-    public event Action OnTakeDamage;
-    public event Action<GameObject> OnTakeDamageWhileInvulnerable;
-    public event Action OnDie;
-
     private void Start()
     {
         health = maxHealth;
@@ -23,16 +19,16 @@ public class Health : MonoBehaviour
 
         if (isInvulnerable)
         {
-            OnTakeDamageWhileInvulnerable?.Invoke(attacker);
+            EventBus<EntityInvulnerableHitEvent>.Raise(new EntityInvulnerableHitEvent(gameObject, attacker));
             return;
         }
 
         health = Mathf.Max(health - damage, 0);
 
-        OnTakeDamage?.Invoke();
+        EventBus<EntityDamagedEvent>.Raise(new EntityDamagedEvent(gameObject, damage, attacker));
 
         if (health == 0)
-            OnDie?.Invoke();
+            EventBus<EntityDiedEvent>.Raise(new EntityDiedEvent(gameObject));
 
         Debug.Log($"Health: {health}");
     }

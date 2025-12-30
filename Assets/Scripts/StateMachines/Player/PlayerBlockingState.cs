@@ -13,7 +13,7 @@ public class PlayerBlockingState : PlayerBaseState
         stateMachine.Animator.CrossFadeInFixedTime(BlockAnimationHash, CrossFadeDuration);
         stateMachine.Health.SetInvulnerable(true);
         remainingParryWindow = stateMachine.ParryWindowTime;
-        stateMachine.Health.OnTakeDamageWhileInvulnerable += HandleParry;
+        EventBus<EntityInvulnerableHitEvent>.Register(OnInvulnerableHit);
     }
 
     public override void Tick(float deltaTime)
@@ -41,7 +41,13 @@ public class PlayerBlockingState : PlayerBaseState
     public override void Exit()
     {
         stateMachine.Health.SetInvulnerable(false);
-        stateMachine.Health.OnTakeDamageWhileInvulnerable -= HandleParry;
+        EventBus<EntityInvulnerableHitEvent>.Deregister(OnInvulnerableHit);
+    }
+
+    private void OnInvulnerableHit(EntityInvulnerableHitEvent @event)
+    {
+        if (@event.Target == stateMachine.gameObject)
+            HandleParry(@event.Attacker);
     }
 
     private void HandleParry(GameObject attacker)

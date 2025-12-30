@@ -47,15 +47,15 @@ public class EnemyStateMachine : StateMachine
 
     private void OnEnable()
     {
-        Health.OnTakeDamage += HandleTakeDamage;
-        Health.OnDie += HandleDie;
+        EventBus<EntityDamagedEvent>.Register(OnDamage);
+        EventBus<EntityDiedEvent>.Register(OnDie);
 
     }
 
     private void OnDisable()
     {
-        Health.OnTakeDamage -= HandleTakeDamage;
-        Health.OnDie -= HandleDie;
+        EventBus<EntityDamagedEvent>.Deregister(OnDamage);
+        EventBus<EntityDiedEvent>.Deregister(OnDie);
     }
 
     private void OnDrawGizmosSelected()
@@ -67,13 +67,15 @@ public class EnemyStateMachine : StateMachine
         Gizmos.DrawWireSphere(transform.position, AttackRange);
     }
 
-    private void HandleTakeDamage()
+    private void OnDamage(EntityDamagedEvent @event)
     {
-        SwitchState(ImpactState);
+        if (@event.Target == gameObject)
+            SwitchState(ImpactState);
     }
 
-    private void HandleDie()
+    private void OnDie(EntityDiedEvent @event)
     {
-        SwitchState(DeadState);
+        if (@event.Target == gameObject)
+            SwitchState(DeadState);
     }
 }
