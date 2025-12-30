@@ -196,7 +196,7 @@ MonoBehaviour:
   <DodgeDuration>k__BackingField: 0.6
   <DodgeDistance>k__BackingField: 3
   <JumpForce>k__BackingField: 4
-  <ParryWindowTime>k__BackingField: 1
+  <ParryWindowTime>k__BackingField: 0.5
   <ParryKnockback>k__BackingField: 5
 --- !u!114 &6753474884219944742
 MonoBehaviour:
