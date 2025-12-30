@@ -20,6 +20,21 @@ public class EnemyStateMachine : StateMachine
 
     public Health Player { get; private set; }
 
+    public EnemyAttackingState AttackingState { get; private set; }
+    public EnemyChasingState ChasingState { get; private set; }
+    public EnemyDeadState DeadState { get; private set; }
+    public EnemyIdleState IdleState { get; private set; }
+    public EnemyImpactState ImpactState { get; private set; }
+
+    private void Awake()
+    {
+        AttackingState = new EnemyAttackingState(this);
+        ChasingState = new EnemyChasingState(this);
+        DeadState = new EnemyDeadState(this);
+        IdleState = new EnemyIdleState(this);
+        ImpactState = new EnemyImpactState(this);
+    }
+
     private void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
@@ -27,7 +42,7 @@ public class EnemyStateMachine : StateMachine
         Agent.updatePosition = false;
         Agent.updateRotation = false;
 
-        SwitchState(new EnemyIdleState(this));
+        SwitchState(IdleState);
     }
 
     private void OnEnable()
@@ -54,11 +69,11 @@ public class EnemyStateMachine : StateMachine
 
     private void HandleTakeDamage()
     {
-        SwitchState(new EnemyImpactState(this));
+        SwitchState(ImpactState);
     }
 
     private void HandleDie()
     {
-        SwitchState(new EnemyDeadState(this));
+        SwitchState(DeadState);
     }
 }

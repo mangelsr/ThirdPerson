@@ -9,7 +9,11 @@ public class PlayerFreeLookState : PlayerBaseState
     private const float CrossFadeDuration = 0.1f;
     private bool shouldFade;
 
-    public PlayerFreeLookState(PlayerStateMachine stateMachine, bool shouldFade = true) : base(stateMachine)
+    public PlayerFreeLookState(PlayerStateMachine stateMachine) : base(stateMachine)
+    {
+    }
+
+    public void Init(bool shouldFade = true)
     {
         this.shouldFade = shouldFade;
     }
@@ -31,7 +35,8 @@ public class PlayerFreeLookState : PlayerBaseState
     {
         if (stateMachine.InputReader.IsAttacking)
         {
-            stateMachine.SwitchState(new PlayerAttackingState(stateMachine, 0));
+            stateMachine.AttackingState.Init(0);
+            stateMachine.SwitchState(stateMachine.AttackingState);
             return;
         }
 
@@ -54,6 +59,7 @@ public class PlayerFreeLookState : PlayerBaseState
     {
         stateMachine.InputReader.TargetEvent -= OnTarget;
         stateMachine.InputReader.JumpEvent -= OnJump;
+        shouldFade = true;
     }
 
     private Vector3 CalculateMovement()
@@ -84,11 +90,11 @@ public class PlayerFreeLookState : PlayerBaseState
     private void OnTarget()
     {
         if (stateMachine.Targeter.CanSelectTarget())
-            stateMachine.SwitchState(new PlayerTargetingState(stateMachine));
+            stateMachine.SwitchState(stateMachine.TargetingState);
     }
 
     private void OnJump()
     {
-        stateMachine.SwitchState(new PlayerJumpingState(stateMachine));
+        stateMachine.SwitchState(stateMachine.JumpingState);
     }
 }

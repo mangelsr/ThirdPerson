@@ -28,13 +28,42 @@ public class PlayerStateMachine : StateMachine
 
     public Transform MainCameraTransform { get; private set; }
 
+    public PlayerAttackingState AttackingState { get; private set; }
+    public PlayerBlockingState BlockingState { get; private set; }
+    public PlayerDeadState DeadState { get; private set; }
+    public PlayerDodgingState DodgingState { get; private set; }
+    public PlayerFallingState FallingState { get; private set; }
+    public PlayerFreeLookState FreeLookState { get; private set; }
+    public PlayerHangingState HangingState { get; private set; }
+    public PlayerImpactState ImpactState { get; private set; }
+    public PlayerJumpingState JumpingState { get; private set; }
+    public PlayerParryState ParryState { get; private set; }
+    public PlayerPullUpState PullUpState { get; private set; }
+    public PlayerTargetingState TargetingState { get; private set; }
+
+    private void Awake()
+    {
+        AttackingState = new PlayerAttackingState(this);
+        BlockingState = new PlayerBlockingState(this);
+        DeadState = new PlayerDeadState(this);
+        DodgingState = new PlayerDodgingState(this);
+        FallingState = new PlayerFallingState(this);
+        FreeLookState = new PlayerFreeLookState(this);
+        HangingState = new PlayerHangingState(this);
+        ImpactState = new PlayerImpactState(this);
+        JumpingState = new PlayerJumpingState(this);
+        ParryState = new PlayerParryState(this);
+        PullUpState = new PlayerPullUpState(this);
+        TargetingState = new PlayerTargetingState(this);
+    }
+
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
         MainCameraTransform = Camera.main.transform;
-        SwitchState(new PlayerFreeLookState(this));
+        SwitchState(FreeLookState);
     }
 
     private void OnEnable()
@@ -51,11 +80,11 @@ public class PlayerStateMachine : StateMachine
 
     private void HandleTakeDamage()
     {
-        SwitchState(new PlayerImpactState(this));
+        SwitchState(ImpactState);
     }
 
     private void HandleDie()
     {
-        SwitchState(new PlayerDeadState(this));
+        SwitchState(DeadState);
     }
 }

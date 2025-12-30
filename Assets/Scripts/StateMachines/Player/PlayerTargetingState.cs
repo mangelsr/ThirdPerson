@@ -23,19 +23,20 @@ public class PlayerTargetingState : PlayerBaseState
     {
         if (stateMachine.InputReader.IsAttacking)
         {
-            stateMachine.SwitchState(new PlayerAttackingState(stateMachine, 0));
+        stateMachine.AttackingState.Init(0);
+        stateMachine.SwitchState(stateMachine.AttackingState);
             return;
         }
 
         if (stateMachine.Targeter.CurrentTarget == null)
         {
-            stateMachine.SwitchState(new PlayerFreeLookState(stateMachine));
+            stateMachine.SwitchState(stateMachine.FreeLookState);
             return;
         }
 
         if (stateMachine.InputReader.IsBlocking)
         {
-            stateMachine.SwitchState(new PlayerBlockingState(stateMachine));
+            stateMachine.SwitchState(stateMachine.BlockingState);
             return;
         }
 
@@ -55,21 +56,20 @@ public class PlayerTargetingState : PlayerBaseState
     private void OnTarget()
     {
         stateMachine.Targeter.Cancel();
-        stateMachine.SwitchState(new PlayerFreeLookState(stateMachine));
+        stateMachine.SwitchState(stateMachine.FreeLookState);
     }
 
     private void OnDodge()
     {
         if (stateMachine.InputReader.MovementValue == Vector2.zero) return;
 
-        stateMachine.SwitchState(
-            new PlayerDodgingState(stateMachine, stateMachine.InputReader.MovementValue)
-        );
+        stateMachine.DodgingState.Init(stateMachine.InputReader.MovementValue);
+        stateMachine.SwitchState(stateMachine.DodgingState);
     }
 
     private void OnJump()
     {
-        stateMachine.SwitchState(new PlayerJumpingState(stateMachine));
+        stateMachine.SwitchState(stateMachine.JumpingState);
     }
 
     private Vector3 CalculateMovement(float deltaTime)

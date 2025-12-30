@@ -21,7 +21,8 @@ public class PlayerPullUpState : PlayerBaseState
         stateMachine.transform.Translate(Offset, Space.Self);
         stateMachine.CharacterController.enabled = true;
 
-        stateMachine.SwitchState(new PlayerFreeLookState(stateMachine, false));
+        stateMachine.FreeLookState.Init(false);
+        stateMachine.SwitchState(stateMachine.FreeLookState);
     }
 
 

@@ -8,8 +8,11 @@ public class PlayerHangingState : PlayerBaseState
     private Vector3 ledgeForward;
     private Vector3 closestPoint;
 
-    public PlayerHangingState(
-        PlayerStateMachine stateMachine, Vector3 ledgeForward, Vector3 closestPoint) : base(stateMachine)
+    public PlayerHangingState(PlayerStateMachine stateMachine) : base(stateMachine)
+    {
+    }
+
+    public void Init(Vector3 ledgeForward, Vector3 closestPoint)
     {
         this.ledgeForward = ledgeForward;
         this.closestPoint = closestPoint;
@@ -34,13 +37,13 @@ public class PlayerHangingState : PlayerBaseState
         Vector2 movement = stateMachine.InputReader.MovementValue;
         if (movement.y > 0)
         {
-            stateMachine.SwitchState(new PlayerPullUpState(stateMachine));
+            stateMachine.SwitchState(stateMachine.PullUpState);
         }
         else if (movement.y < 0)
         {
             stateMachine.CharacterController.Move(Vector3.zero);
             stateMachine.ForceReceiver.Reset();
-            stateMachine.SwitchState(new PlayerFallingState(stateMachine));
+            stateMachine.SwitchState(stateMachine.FallingState);
             return;
         }
     }

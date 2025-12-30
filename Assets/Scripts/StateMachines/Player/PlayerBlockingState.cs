@@ -27,13 +27,13 @@ public class PlayerBlockingState : PlayerBaseState
 
         if (!stateMachine.InputReader.IsBlocking)
         {
-            stateMachine.SwitchState(new PlayerTargetingState(stateMachine));
+            stateMachine.SwitchState(stateMachine.TargetingState);
             return;
         }
 
         if (stateMachine.Targeter.CurrentTarget == null)
         {
-            stateMachine.SwitchState(new PlayerFreeLookState(stateMachine));
+            stateMachine.SwitchState(stateMachine.FreeLookState);
             return;
         }
     }
@@ -48,7 +48,8 @@ public class PlayerBlockingState : PlayerBaseState
     {
         if (remainingParryWindow > 0)
         {
-            stateMachine.SwitchState(new PlayerParryState(stateMachine, attacker));
+            stateMachine.ParryState.SetAttacker(attacker);
+            stateMachine.SwitchState(stateMachine.ParryState);
         }
     }
 }

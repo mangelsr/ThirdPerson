@@ -4,12 +4,22 @@ public class PlayerParryState : PlayerBaseState
 {
     private readonly int ParryAnimationHash = Animator.StringToHash("Parry");
     private const float CrossFadeDuration = 0.1f;
-    private readonly GameObject attacker;
+    private GameObject attacker;
     private bool parryApplied;
 
-    public PlayerParryState(PlayerStateMachine stateMachine, GameObject attacker) : base(stateMachine)
+    public PlayerParryState(PlayerStateMachine stateMachine) : base(stateMachine)
+    {
+    }
+
+    public void SetAttacker(GameObject attacker)
     {
         this.attacker = attacker;
+    }
+
+    public void Reset()
+    {
+        parryApplied = false;
+        attacker = null;
     }
 
     public override void Enter()
@@ -30,12 +40,12 @@ public class PlayerParryState : PlayerBaseState
         {
             if (stateMachine.Targeter.CurrentTarget == null)
             {
-                stateMachine.SwitchState(new PlayerFreeLookState(stateMachine));
+                stateMachine.SwitchState(stateMachine.FreeLookState);
                 return;
             }
             else
             {
-                stateMachine.SwitchState(new PlayerTargetingState(stateMachine));
+                stateMachine.SwitchState(stateMachine.TargetingState);
                 return;
             }
         }
@@ -43,6 +53,7 @@ public class PlayerParryState : PlayerBaseState
 
     public override void Exit()
     {
+        Reset();
     }
 
     private void Parry()
@@ -58,7 +69,7 @@ public class PlayerParryState : PlayerBaseState
                 forceReceiver.AddForce(direction * stateMachine.ParryKnockback);
             }
             if (attacker.TryGetComponent(out EnemyStateMachine enemyStateMachine)) {
-                enemyStateMachine.SwitchState(new EnemyImpactState(enemyStateMachine));
+                enemyStateMachine.SwitchState(enemyStateMachine.ImpactState);
             }
             parryApplied = true;
         }

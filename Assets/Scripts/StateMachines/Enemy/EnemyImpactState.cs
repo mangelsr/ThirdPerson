@@ -21,7 +21,7 @@ public class EnemyImpactState : EnemyBaseState
 
         if (duration <= 0f)
         {
-            stateMachine.SwitchState(new EnemyIdleState(stateMachine));
+            stateMachine.SwitchState(stateMachine.IdleState);
             return;
         }
     }

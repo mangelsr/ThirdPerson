@@ -5,7 +5,11 @@ public class PlayerAttackingState : PlayerBaseState
     private Attack attack;
     private bool alreadyAppliedForce = false;
 
-    public PlayerAttackingState(PlayerStateMachine stateMachine, int attackIndex) : base(stateMachine)
+    public PlayerAttackingState(PlayerStateMachine stateMachine) : base(stateMachine)
+    {
+    }
+
+    public void Init(int attackIndex)
     {
         attack = stateMachine.Attacks[attackIndex];
     }
@@ -36,9 +40,9 @@ public class PlayerAttackingState : PlayerBaseState
             PlayerBaseState newState;
 
             if (stateMachine.Targeter.CurrentTarget == null)
-                newState = new PlayerFreeLookState(stateMachine);
+                newState = stateMachine.FreeLookState;
             else
-                newState = new PlayerTargetingState(stateMachine);
+                newState = stateMachine.TargetingState;
 
             stateMachine.SwitchState(newState);
         }
@@ -46,6 +50,7 @@ public class PlayerAttackingState : PlayerBaseState
 
     public override void Exit()
     {
+        alreadyAppliedForce = false;
     }
 
     private void TryComboAttack(float normalizedTime)
@@ -54,9 +59,8 @@ public class PlayerAttackingState : PlayerBaseState
 
         if (normalizedTime < attack.ComboAttackTime) return;
 
-        stateMachine.SwitchState(
-            new PlayerAttackingState(stateMachine, attack.ComboStateIndex)
-        );
+        stateMachine.AttackingState.Init(attack.ComboStateIndex);
+        stateMachine.SwitchState(stateMachine.AttackingState);
     }
 
     private void TryApplyForce()

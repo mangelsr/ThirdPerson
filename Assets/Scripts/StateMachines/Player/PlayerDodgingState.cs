@@ -11,7 +11,11 @@ public class PlayerDodgingState : PlayerBaseState
     private Vector3 dodgingDirectionInput;
     private float remainingDodgeTime;
 
-    public PlayerDodgingState(PlayerStateMachine stateMachine, Vector3 dodgingDirectionInput) : base(stateMachine)
+    public PlayerDodgingState(PlayerStateMachine stateMachine) : base(stateMachine)
+    {
+    }
+
+    public void Init(Vector3 dodgingDirectionInput)
     {
         this.dodgingDirectionInput = dodgingDirectionInput;
     }
@@ -40,7 +44,7 @@ public class PlayerDodgingState : PlayerBaseState
         remainingDodgeTime -= deltaTime;
         if (remainingDodgeTime <= 0f)
         {
-            stateMachine.SwitchState(new PlayerTargetingState(stateMachine));
+            stateMachine.SwitchState(stateMachine.TargetingState);
             return;
         }
     }

@@ -28,7 +28,7 @@ public class PlayerJumpingState : PlayerBaseState
 
         if (stateMachine.CharacterController.velocity.y <= 0)
         {
-            stateMachine.SwitchState(new PlayerFallingState(stateMachine));
+            stateMachine.SwitchState(stateMachine.FallingState);
             return;
         }
 
@@ -42,6 +42,7 @@ public class PlayerJumpingState : PlayerBaseState
 
     private void HandleLedgeDetect(Vector3 ledgeForward, Vector3 closestPoint)
     {
-        stateMachine.SwitchState(new PlayerHangingState(stateMachine, ledgeForward, closestPoint));
+        stateMachine.HangingState.Init(ledgeForward, closestPoint);
+        stateMachine.SwitchState(stateMachine.HangingState);
     }
 }

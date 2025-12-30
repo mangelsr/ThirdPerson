@@ -19,7 +19,7 @@ public class EnemyAttackingState : EnemyBaseState
         float normalizedTime = GetNormalizedTime(stateMachine.Animator, "Attack");
 
         if (normalizedTime >= 1f)
-            stateMachine.SwitchState(new EnemyChasingState(stateMachine));
+            stateMachine.SwitchState(stateMachine.ChasingState);
 
         FacePlayer();
     }
